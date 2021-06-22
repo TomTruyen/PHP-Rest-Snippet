@@ -45,6 +45,31 @@ class User
         $this->password = $row['password'];
     }
 
+    public function readPaging($start, $limit)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " LIMIT ?, ?";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(1, $start, PDO::PARAM_INT);
+        $stmt->bindParam(2, $limit, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+    public function count()
+    {
+        $query = "SELECT COUNT(*) as total_rows FROM " . $this->table_name . "";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $row['total_rows'];
+    }
+
     public function create()
     {
         $query = "INSERT INTO " . $this->table_name . " (email, password) VALUES (:email, :password)";
