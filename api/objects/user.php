@@ -101,4 +101,20 @@ class User
 
         return false;
     }
+
+    public function search($keywords)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE email LIKE ?";
+
+        $stmt = $this->conn->prepare($query);
+
+        $keywords = htmlspecialchars(strip_tags($keywords));
+        $keywords = "%{$keywords}%";
+
+        $stmt->bindParam(1, $keywords);
+
+        $stmt->execute();
+
+        return $stmt;
+    }
 }
